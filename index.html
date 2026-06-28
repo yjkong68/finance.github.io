@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="일반 공학 계산부터 복리 투자, 은퇴 준비, 주식 평단가 계산까지 가능한 스마트 금융 계산기 웹 서비스" name="description"/>
+<title>Smart Finance Calculator - 스마트 금융 계산기</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Outfit:wght@300;400;500;600;700;800&amp;family=Noto+Sans+KR:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Stylesheet -->
+<link href="styles.css" rel="stylesheet"/>
+</head>
+<body class="dark-theme">
+<div class="background-decor">
+<div class="glow-orb orb-1"></div>
+<div class="glow-orb orb-2"></div>
+<div class="glow-orb orb-3"></div>
+</div>
+<div class="app-container">
+<!-- Header Section -->
+<header class="app-header">
+<div class="logo-area">
+<svg class="logo-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24">
+<rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect>
+<line x1="9" x2="15" y1="9" y2="9"></line>
+<line x1="9" x2="15" y1="13" y2="13"></line>
+<line x1="9" x2="15" y1="17" y2="17"></line>
+</svg>
+<div class="logo-text">
+<h1>Smart Finance</h1>
+<span class="logo-sub">Calculator</span>
+</div>
+</div>
+<!-- Theme Toggle Switch -->
+<button aria-label="테마 전환" class="theme-toggle-btn" id="theme-toggle-btn">
+<svg class="sun-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="5"></circle>
+<line x1="12" x2="12" y1="1" y2="3"></line>
+<line x1="12" x2="12" y1="21" y2="23"></line>
+<line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line>
+<line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line>
+<line x1="1" x2="3" y1="12" y2="12"></line>
+<line x1="21" x2="23" y1="12" y2="12"></line>
+<line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line>
+<line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line>
+</svg>
+<svg class="moon-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+</svg>
+</button>
+</header>
+<!-- Navigation Tabs -->
+<nav class="app-tabs" role="tablist"><button aria-controls="tab-portfolio" aria-selected="true" class="tab-btn active" data-tab="portfolio" id="tab-btn-portfolio" role="tab">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="14" rx="2" ry="2" width="20" x="2" y="7"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                투자 포트폴리오
+            </button>
+
+<button aria-controls="tab-compound" aria-selected="false" class="tab-btn" data-tab="compound" id="tab-btn-compound" role="tab">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><line x1="18" x2="18" y1="20" y2="10"></line><line x1="12" x2="12" y1="20" y2="4"></line><line x1="6" x2="6" y1="20" y2="14"></line></svg>
+                복리 투자
+            </button>
+<button aria-controls="tab-target-wealth" aria-selected="false" class="tab-btn" data-tab="target-wealth" id="tab-btn-target-wealth" role="tab">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                목표 달성 (역산)
+            </button>
+<button aria-controls="tab-retirement" aria-selected="false" class="tab-btn" data-tab="retirement" id="tab-btn-retirement" role="tab">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                은퇴 설계 (4% 룰)
+            </button>
+
+<button aria-controls="tab-standard" aria-selected="false" class="tab-btn" data-tab="standard" id="tab-btn-standard" role="tab">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><rect height="16" rx="2" width="16" x="4" y="4"></rect><line x1="9" x2="15" y1="9" y2="15"></line><line x1="15" x2="9" y1="9" y2="15"></line></svg>
+                일반/공학 계산기
+            </button></nav>
+<!-- Main Content Area -->
+<main class="app-main"><section aria-labelledby="tab-btn-portfolio" class="tab-content active" id="tab-portfolio" role="tabpanel">
+<div class="portfolio-dashboard">
+<!-- Dashboard Header -->
+<div class="portfolio-summary-header glass-card">
+<div class="summary-title-area">
+<h2>투자 포트폴리오 현황</h2>
+<p class="section-desc">★포트폴리오(260626) 기준 자산 현황입니다. 주식계좌와 연금계좌의 투자 비율 및 상세 자산 명세를 시각화하여 보여줍니다.</p>
+</div>
+<div class="portfolio-total-cards">
+<div class="total-card">
+<span class="total-label">총 자산 평가액</span>
+<span class="total-val highlight" id="total-eval-val">0 원</span>
+</div>
+<div class="total-card">
+<span class="total-label">총 평가 손익</span>
+<span class="total-val" id="total-profit-val">0 원</span>
+</div>
+<div class="total-card">
+<span class="total-label">통합 수익률</span>
+<span class="total-val" id="total-rate-val">0%</span>
+</div>
+</div>
+</div>
+<!-- Layout: Accounts Grid -->
+<div class="portfolio-accounts-grid">
+<!-- 1. Stock Account Card -->
+<div class="account-card glass-card">
+<div class="account-header">
+<div class="account-title-group">
+<h3>주식계좌</h3>
+<span class="account-subtitle">미래에셋 472-8112-5592-0</span>
+</div>
+<div class="account-summary-vals">
+<div class="summary-item">
+<span class="item-lbl">평가액</span>
+<span class="item-val" id="stock-total-eval">0 원</span>
+</div>
+<div class="summary-item">
+<span class="item-lbl">수익률</span>
+<span class="item-val" id="stock-total-rate">0%</span>
+</div>
+</div>
+</div>
+<div class="account-body-layout">
+<div class="portfolio-chart-wrapper">
+<canvas id="stockPieChart"></canvas>
+</div>
+<div class="portfolio-table-wrapper">
+<table class="portfolio-table">
+<thead>
+<tr>
+<th>종목명</th>
+<th class="num-col">현재가 (평가금액)</th>
+<th class="num-col">비율</th>
+<th class="num-col">평단가</th>
+<th class="num-col">현재단가</th>
+<th class="num-col">수량</th>
+<th class="num-col">수익률</th>
+</tr>
+</thead>
+<tbody id="stock-portfolio-body">
+<!-- Populate via JS -->
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- 2. Pension Account Card -->
+<div class="account-card glass-card">
+<div class="account-header">
+<div class="account-title-group">
+<h3>연금계좌</h3>
+<span class="account-subtitle">퇴직연금 계좌</span>
+</div>
+<div class="account-summary-vals">
+<div class="summary-item">
+<span class="item-lbl">평가액</span>
+<span class="item-val" id="pension-total-eval">0 원</span>
+</div>
+<div class="summary-item">
+<span class="item-lbl">수익률</span>
+<span class="item-val" id="pension-total-rate">0%</span>
+</div>
+</div>
+</div>
+<div class="account-body-layout">
+<div class="portfolio-chart-wrapper">
+<canvas id="pensionPieChart"></canvas>
+</div>
+<div class="portfolio-table-wrapper">
+<table class="portfolio-table">
+<thead>
+<tr>
+<th>종목명</th>
+<th class="num-col">현재가 (평가금액)</th>
+<th class="num-col">비율</th>
+<th class="num-col">매입단가</th>
+<th class="num-col">현재단가</th>
+<th class="num-col">수량</th>
+<th class="num-col">수익률</th>
+</tr>
+</thead>
+<tbody id="pension-portfolio-body">
+<!-- Populate via JS -->
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 1. Standard Calculator Tab -->
+
+<!-- 2. Compound Interest Tab -->
+<section aria-labelledby="tab-btn-compound" class="tab-content" id="tab-compound" role="tabpanel">
+<div class="finance-layout">
+<!-- Input Section -->
+<div class="finance-form glass-card">
+<h2>복리 투자 시뮬레이션</h2>
+<p class="section-desc">적립식 투자액과 수익률이 가져오는 복리 효과를 그래프로 확인해 보세요.</p>
+<div class="input-group">
+<div class="label-row">
+<label for="comp-initial">초기 투자 금액</label>
+<div class="badge-input-wrapper">
+<input class="input-value-badge-input" id="comp-initial-input" max="50000" min="0" step="100" type="number" value="1000"/>
+<span class="badge-unit-text">만원</span>
+</div>
+</div>
+<input id="comp-initial" max="50000" min="0" step="100" type="range" value="1000"/>
+<div class="slider-limits">
+<span>0원</span>
+<span>5억 원</span>
+</div>
+</div>
+<div class="input-group">
+<div class="label-row">
+<label for="comp-monthly">월 적립 금액</label>
+<div class="badge-input-wrapper">
+<input class="input-value-badge-input" id="comp-monthly-input" max="1000" min="0" step="5" type="number" value="100"/>
+<span class="badge-unit-text">만원</span>
+</div>
+</div>
+<input id="comp-monthly" max="1000" min="0" step="5" type="range" value="100"/>
+<div class="slider-limits">
+<span>0원</span>
+<span>1,000만 원</span>
+</div>
+</div>
+<div class="input-group">
+<div class="label-row">
+<label for="comp-rate">연 평균 수익률 (%)</label>
+<div class="badge-input-wrapper">
+<input class="input-value-badge-input" id="comp-rate-input" max="100" min="0.1" step="0.1" type="number" value="8"/>
+<span class="badge-unit-text">%</span>
+</div>
+</div>
+<input id="comp-rate" max="100" min="0.1" step="0.1" type="range" value="8"/>
+<div class="slider-limits">
+<span>0.1%</span>
+<span>100%</span>
+</div>
+<div class="preset-buttons">
+<button class="btn-preset" data-rate="3.5" data-target="comp-rate" type="button">시중 예적금 (3.5%)</button>
+<button class="btn-preset" data-rate="6.0" data-target="comp-rate" type="button">올웨더 (6%)</button>
+<button class="btn-preset" data-rate="9.0" data-target="comp-rate" type="button">S&amp;P 500 (9%)</button>
+<button class="btn-preset" data-rate="15.0" data-target="comp-rate" type="button">나스닥 (15%)</button>
+</div>
+</div>
+<div class="input-group">
+<div class="label-row">
+<label for="comp-years">투자 기간 (년)</label>
+<span class="input-value-badge" id="comp-years-badge">15 년</span>
+</div>
+<input id="comp-years" max="40" min="1" step="1" type="range" value="15"/>
+<div class="slider-limits">
+<span>1년</span>
+<span>40년</span>
+</div>
+</div>
+<div class="input-group">
+<label>복리 적용 주기</label>
+<div class="toggle-group">
+<input checked="" id="comp-period-month" name="comp-period" type="radio" value="monthly"/>
+<label for="comp-period-month">월복리</label>
+<input id="comp-period-year" name="comp-period" type="radio" value="yearly"/>
+<label for="comp-period-year">연복리</label>
+</div>
+</div>
+</div>
+<!-- Result & Visualization Section -->
+<div class="finance-results">
+<div class="result-cards-grid">
+<div class="result-card glass-card">
+<span class="res-label">최종 평가 금액</span>
+<span class="res-value highlight" id="res-comp-total">0 원</span>
+</div>
+<div class="result-card glass-card">
+<span class="res-label">원금 누적액</span>
+<span class="res-value" id="res-comp-principal">0 원</span>
+</div>
+<div class="result-card glass-card">
+<span class="res-label">수익(이자) 누적액</span>
+<span class="res-value success-text" id="res-comp-interest">0 원</span>
+</div>
+</div>
+<div class="chart-container glass-card">
+<h3>연도별 자산 성장 그래프</h3>
+<div class="canvas-wrapper">
+<canvas id="compoundChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Retirement Calculator Tab -->
+<section aria-labelledby="tab-btn-retirement" class="tab-content" id="tab-retirement" role="tabpanel">
+<div class="finance-layout">
+<!-- Input Section -->
+<div class="finance-form glass-card">
+<h2>은퇴 준비 &amp; 4% 룰 설계</h2>
+<p class="section-desc">미국 트리니티 대학의 연구에 기반한 은퇴 자금 계산기입니다. 연 생활비의 25배를 모으면 매년 4%씩 찾아 써도 자산이 고갈되지 않는다는 이론입니다.</p>
+<div class="input-group">
+<div class="label-row">
+<label for="ret-expense">은퇴 후 희망 월 생활비</label>
+<span class="input-value-badge" id="ret-expense-badge">300 만원</span>
+</div>
+<input id="ret-expense" max="2000" min="50" step="10" type="range" value="300"/>
+<div class="slider-limits">
+<span>50만 원</span>
+<span>2,000만 원</span>
+</div>
+</div>
+<div class="input-group">
+<div class="label-row">
+<label for="ret-current">현재 모아둔 투자 자산</label>
+<span class="input-value-badge" id="ret-current-badge">5,000 만원</span>
+</div>
+<input id="ret-current" max="200000" min="0" step="500" type="range" value="5000"/>
+<div class="slider-limits">
+<span>0원</span>
+<span>20억 원</span>
+</div>
+</div>
+<div class="input-group">
+<div class="label-row">
+<label for="ret-saving">매월 추가 저축/투자금</label>
+<span class="input-value-badge" id="ret-saving-badge">150 만원</span>
+</div>
+<input id="ret-saving" max="2000" min="0" step="10" type="range" value="150"/>
+<div class="slider-limits">
+<span>0원</span>
+<span>2,000만 원</span>
+</div>
+</div>
+<div class="input-group">
+<div class="label-row">
+<label for="ret-rate">투자 자산의 예상 수익률 (%)</label>
+<span class="input-value-badge" id="ret-rate-badge">7 %</span>
+</div>
+<input id="ret-rate" max="25" min="1" step="0.5" type="range" value="7"/>
+<div class="slider-limits">
+<span>1%</span>
+<span>25%</span>
+</div>
+<div class="preset-buttons">
+<button class="btn-preset" data-rate="3.5" data-target="ret-rate" type="button">예적금 (3.5%)</button>
+<button class="btn-preset" data-rate="6.0" data-target="ret-rate" type="button">올웨더 (6%)</button>
+<button class="btn-preset" data-rate="8.0" data-target="ret-rate" type="button">안정 성장 (8%)</button>
+<button class="btn-preset" data-rate="10.0" data-target="ret-rate" type="button">주식형 (10%)</button>
+</div>
+</div>
+<div class="input-group">
+<div class="label-row">
+<label for="ret-swr">연간 안전 인출률 (SWR, %)</label>
+<span class="input-value-badge" id="ret-swr-badge">4 %</span>
+</div>
+<input id="ret-swr" max="8" min="2" step="0.1" type="range" value="4"/>
+<div class="slider-limits">
+<span>2%</span>
+<span>8%</span>
+</div>
+</div>
+</div>
+<!-- Results Section -->
+<div class="finance-results">
+<div class="result-cards-grid row-2-grid">
+<div class="result-card glass-card span-all">
+<span class="res-label">목표 경제적 자유(FIRE) 자산</span>
+<span class="res-value highlight-accent" id="res-ret-target">0 원</span>
+<p class="card-note">연 생활비 (<span id="res-ret-annual-exp">0</span>원) ÷ 안전 인출률 (<span id="res-ret-swr-text">4</span>%)</p>
+</div>
+<div class="result-card glass-card">
+<span class="res-label">목표까지 남은 자산</span>
+<span class="res-value" id="res-ret-gap">0 원</span>
+</div>
+<div class="result-card glass-card success-card">
+<span class="res-label">경제적 자유 달성까지 예상 기간</span>
+<span class="res-value" id="res-ret-years">0 년</span>
+<p class="card-note">매월 꾸준히 복리 투자 시 소요 기간</p>
+</div>
+</div>
+<div class="info-details-box glass-card">
+<h3>재정 독립을 위한 '4% 룰' 가이드</h3>
+<ul>
+<li><strong>25배의 법칙:</strong> 목표 자산은 은퇴 후 필요한 1년 생활비의 25배입니다. (안전 인출률 4% 기준)</li>
+<li><strong>은퇴 자산 고갈 테스트:</strong> 역사적 백테스트에 따르면, 인플레이션을 감안하고 매년 포트폴리오의 4%를 인출하더라도 30년 이상 자산이 고갈되지 않을 확률이 95%가 넘습니다.</li>
+<li><strong>수익률의 중요성:</strong> 투자 수익률이 높을수록 목표 자산에 도달하는 시간이 지수함수적으로 줄어듭니다.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Target Wealth Calculator Tab -->
+<section aria-labelledby="tab-btn-target-wealth" class="tab-content" id="tab-target-wealth" role="tabpanel">
+<div class="finance-layout">
+<!-- Input Section -->
+<div class="finance-form glass-card">
+<h2>목표 자산 달성 계산기 (적립 역산)</h2>
+<p class="section-desc">목표하는 자산에 도달하기 위해 매달 얼마씩 투자해야 하는지 자동으로 역산해 드립니다.</p>
+<div class="input-group">
+<div class="label-row">
+<label for="target-wealth-amount">목표 자산 금액</label>
+<div class="badge-input-wrapper">
+<input class="input-value-badge-input" id="target-wealth-amount-input" max="1000000" min="100" step="500" type="number" value="10000"/>
+<span class="badge-unit-text">만원</span>
+</div>
+</div>
+<input id="target-wealth-amount" max="1000000" min="100" step="500" type="range" value="10000"/>
+<div class="slider-limits">
+<span>100만 원</span>
+<span>100억 원</span>
+</div>
+</div>
+<div class="input-group">
+<div class="label-row">
+<label for="target-initial">시작 투자 금액 (거치금)</label>
+<span class="input-value-badge" id="target-initial-badge">1,000만 원</span>
+</div>
+<input id="target-initial" max="50000" min="0" step="100" type="range" value="1000"/>
+<div class="slider-limits">
+<span>0원</span>
+<span>5억 원</span>
+</div>
+</div>
+<div class="input-group">
+<div class="label-row">
+<label for="target-rate">연 평균 예상 수익률 (%)</label>
+<span class="input-value-badge" id="target-rate-badge">8 %</span>
+</div>
+<input id="target-rate" max="30" min="0.1" step="0.1" type="range" value="8"/>
+<div class="slider-limits">
+<span>0.1%</span>
+<span>30%</span>
+</div>
+<div class="preset-buttons">
+<button class="btn-preset" data-rate="3.5" data-target="target-rate" type="button">예적금 (3.5%)</button>
+<button class="btn-preset" data-rate="6.0" data-target="target-rate" type="button">올웨더 (6%)</button>
+<button class="btn-preset" data-rate="9.0" data-target="target-rate" type="button">S&amp;P 500 (9%)</button>
+<button class="btn-preset" data-rate="15.0" data-target="target-rate" type="button">나스닥 (15%)</button>
+</div>
+</div>
+<div class="input-group">
+<div class="label-row">
+<label for="target-years">목표 달성 기간 (년)</label>
+<span class="input-value-badge" id="target-years-badge">10 년</span>
+</div>
+<input id="target-years" max="40" min="1" step="1" type="range" value="10"/>
+<div class="slider-limits">
+<span>1년</span>
+<span>40년</span>
+</div>
+</div>
+<div class="input-group">
+<label>복리 적용 주기</label>
+<div class="toggle-group">
+<input checked="" id="target-period-month" name="target-period" type="radio" value="monthly"/>
+<label for="target-period-month">월복리</label>
+<input id="target-period-year" name="target-period" type="radio" value="yearly"/>
+<label for="target-period-year">연복리</label>
+</div>
+</div>
+</div>
+<!-- Result & Visualization Section -->
+<div class="finance-results">
+<div class="result-cards-grid row-3-grid">
+<div class="result-card glass-card span-all primary-glow-card">
+<span class="res-label">필요 월 적립 금액</span>
+<span class="res-value highlight" id="res-target-monthly">0 원</span>
+<p class="card-note">매달 초 저축해야 하는 예상 저축액</p>
+</div>
+<div class="result-card glass-card">
+<span class="res-label">누적 원금 총액</span>
+<span class="res-value" id="res-target-principal">0 원</span>
+</div>
+<div class="result-card glass-card">
+<span class="res-label">누적 이자 수익</span>
+<span class="res-value success-text" id="res-target-interest">0 원</span>
+</div>
+</div>
+<div class="chart-container glass-card">
+<h3>목표 자산 도달 자산 추이</h3>
+<div class="canvas-wrapper">
+<canvas id="targetWealthChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. Investment Portfolio Tab -->
+
+<section aria-labelledby="tab-btn-standard" class="tab-content" id="tab-standard" role="tabpanel">
+<div class="calculator-wrapper">
+<!-- Calculator Main Card -->
+<div class="calculator-body glass-card">
+<!-- Screen Display -->
+<div class="calculator-screen">
+<div class="formula-display" id="calc-formula"></div>
+<div class="input-display" id="calc-display">0</div>
+</div>
+<!-- Scientific Toggle & Shortcut Guide -->
+<div class="sci-toggle-bar">
+<button class="text-btn" id="shortcut-guide-btn" style="margin-right: auto;">단축키 안내</button>
+<div class="angle-mode-toggle">
+<span class="angle-label">각도:</span>
+<button class="angle-btn active" id="btn-deg-mode">DEG</button>
+<button class="angle-btn" id="btn-rad-mode">RAD</button>
+</div>
+<button class="text-btn" id="toggle-sci-btn">공학용 키패드 보이기</button>
+</div>
+<!-- Buttons Panel -->
+<div class="calc-keypad" id="keypad-container">
+<!-- Scientific Keys (Hidden by default, toggled with JS) -->
+<div class="scientific-keys hidden" id="scientific-pad">
+<button class="btn btn-sci" data-action="sin">sin</button>
+<button class="btn btn-sci" data-action="cos">cos</button>
+<button class="btn btn-sci" data-action="tan">tan</button>
+<button class="btn btn-sci" data-action="sqrt">√</button>
+<button class="btn btn-sci" data-action="pow">xʸ</button>
+<button class="btn btn-sci" data-action="log">log</button>
+<button class="btn btn-sci" data-action="ln">ln</button>
+<button class="btn btn-sci" data-val="PI">π</button>
+<button class="btn btn-sci" data-val="E">e</button>
+<button class="btn btn-sci" data-action="fact">x!</button>
+</div>
+<!-- Basic Keys Grid -->
+<div class="basic-keys">
+<button class="btn btn-clear btn-action" data-action="clear" id="btn-clear">AC</button>
+<button class="btn btn-action" data-action="backspace" id="btn-back">⌫</button>
+<button class="btn btn-action" data-val="(">(</button>
+<button class="btn btn-action" data-val=")">)</button>
+<button class="btn btn-num" data-val="7">7</button>
+<button class="btn btn-num" data-val="8">8</button>
+<button class="btn btn-num" data-val="9">9</button>
+<button class="btn btn-operator" data-val="/">÷</button>
+<button class="btn btn-num" data-val="4">4</button>
+<button class="btn btn-num" data-val="5">5</button>
+<button class="btn btn-num" data-val="6">6</button>
+<button class="btn btn-operator" data-val="*">×</button>
+<button class="btn btn-num" data-val="1">1</button>
+<button class="btn btn-num" data-val="2">2</button>
+<button class="btn btn-num" data-val="3">3</button>
+<button class="btn btn-operator" data-val="-">−</button>
+<button class="btn btn-num" data-val="0">0</button>
+<button class="btn btn-num" data-val=".">.</button>
+<button class="btn btn-num" data-action="percent">%</button>
+<button class="btn btn-operator" data-val="+">+</button>
+<button class="btn btn-action btn-ans" data-action="ans" id="btn-ans">Ans</button>
+<button class="btn btn-equals" data-action="calculate" id="btn-equals">=</button>
+</div>
+</div>
+</div>
+<!-- History Panel (Side Card) -->
+<div class="history-panel glass-card">
+<div class="panel-header">
+<h3>계산 기록</h3>
+<button aria-label="기록 삭제" class="icon-btn" id="clear-history-btn">
+<svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+</button>
+</div>
+<div class="history-list" id="history-items">
+<div class="empty-state">최근 계산 기록이 없습니다.</div>
+</div>
+</div>
+</div>
+</section></main>
+<!-- Footer -->
+<footer class="app-footer">
+<p>© 2026 Smart Finance Calculator. All rights reserved. • Designed with ♥ for Investment Success</p>
+</footer>
+</div>
+<!-- Keyboard Shortcut Modal -->
+<div class="modal-overlay hidden" id="shortcut-modal">
+<div class="modal-content glass-card">
+<div class="modal-header">
+<h3>키보드 단축키 안내</h3>
+<button aria-label="닫기" class="icon-btn" id="close-modal-btn">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>
+</button>
+</div>
+<div class="modal-body">
+<div class="shortcut-grid">
+<div class="shortcut-row"><kbd>0</kbd> ~ <kbd>9</kbd><span>숫자 입력</span></div>
+<div class="shortcut-row"><kbd>.</kbd><span>소수점</span></div>
+<div class="shortcut-row"><kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd> <kbd>/</kbd><span>사칙연산</span></div>
+<div class="shortcut-row"><kbd>(</kbd> <kbd>)</kbd><span>괄호</span></div>
+<div class="shortcut-row"><kbd>%</kbd><span>백분율 (/100)</span></div>
+<div class="shortcut-row"><kbd>Enter</kbd> 또는 <kbd>=</kbd><span>결과 계산</span></div>
+<div class="shortcut-row"><kbd>Backspace</kbd><span>지우기 (⌫)</span></div>
+<div class="shortcut-row"><kbd>Esc</kbd><span>초기화 (AC)</span></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Script Application -->
+<script src="app.js"></script>
+</body>
+</html>
